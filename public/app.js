@@ -2,7 +2,6 @@
  * VRIZMODS FRONTEND ENGINE 2026
  * Pure Glassmorphism Tiered System + Dynamic Real Backend Fetch
  */
-
 const API_BASE = '/api';
 
 // Global App State
@@ -41,11 +40,9 @@ function setupEventListeners() {
 async function fetchApksFromBackend() {
   state.loading = true;
   renderView();
-
   try {
     const res = await fetch(`${API_BASE}/apks`);
     const result = await res.json();
-
     if (res.ok) {
       const rawData = Array.isArray(result) ? result : (result.data || result.apks || []);
       state.apks = rawData;
@@ -62,14 +59,11 @@ async function fetchApksFromBackend() {
   }
 }
 
-// Ganti fungsi extractCategories di public/app.js menjadi seperti ini:
 function extractCategories() {
   const catSet = new Set(['All']);
-  
   state.apks.forEach(apk => {
     if (apk.category) catSet.add(apk.category);
   });
-
   state.categories = Array.from(catSet);
   renderCategoryDrawer();
 }
@@ -79,10 +73,10 @@ function applyFilters() {
     const title = apk.title || apk.name || '';
     const modFeatures = apk.mod_features || apk.features || '';
     const category = apk.category || '';
-
+    
     const matchesCategory = state.selectedCategory === 'All' || category === state.selectedCategory;
     const matchesSearch = !state.searchQuery || 
-      title.toLowerCase().includes(state.searchQuery.toLowerCase()) ||
+      title.toLowerCase().includes(state.searchQuery.toLowerCase()) || 
       modFeatures.toLowerCase().includes(state.searchQuery.toLowerCase());
 
     return matchesCategory && matchesSearch;
@@ -108,7 +102,6 @@ function handleRouting() {
 window.scrollToPage = function(route, slug = null) {
   state.currentRoute = route;
   state.currentSlug = slug;
-  
   if (route === 'detail' && slug) {
     window.history.pushState({}, '', `/apk/${slug}`);
   } else if (route === 'apks') {
@@ -116,7 +109,6 @@ window.scrollToPage = function(route, slug = null) {
   } else {
     window.history.pushState({}, '', '/');
   }
-
   window.scrollTo({ top: 0, behavior: 'smooth' });
   renderView();
 };
@@ -147,14 +139,12 @@ function renderView() {
 // 4. VIEWS COMPONENTS (3D GLASSMORPHISM TIERED LAYERS)
 function renderLandingPage() {
   const featured = state.apks.slice(0, 3);
-  
   return `
     <!-- HERO SECTION (GLASS TIER 2 HERO PANEL) -->
     <section class="relative py-12 md:py-16 text-center">
       <div class="relative z-10 p-8 sm:p-12 rounded-3xl bg-slate-900/30 glass-effect-tier2 border border-white/15 shadow-glass-card max-w-5xl mx-auto">
         <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-xs font-semibold text-blue-400 mb-6 backdrop-blur-md">
-          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          Platform Mod APK Glassmorphism 2026
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Platform Mod APK Glassmorphism 2026
         </div>
         
         <h1 class="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight leading-tight text-slate-100 max-w-4xl mx-auto">
@@ -171,11 +161,7 @@ function renderLandingPage() {
         <!-- INSET GLASS SEARCH BAR -->
         <div class="mt-8 max-w-2xl mx-auto relative px-2">
           <div class="relative flex items-center">
-            <input type="text" 
-                   oninput="window.handleSearchInput(this.value)"
-                   value="${state.searchQuery}"
-                   placeholder="Cari game mod, MLBB, GTA, Canva..." 
-                   class="w-full py-4 sm:py-4.5 pl-14 pr-32 bg-slate-950/70 shadow-glass-inset border border-white/10 rounded-2xl text-slate-100 placeholder-slate-500 focus:outline-none focus:border-blue-500/50 text-sm sm:text-base">
+            <input type="text" oninput="window.handleSearchInput(this.value)" value="${state.searchQuery}" placeholder="Cari game mod, MLBB, GTA, Canva..." class="w-full py-4 sm:py-4.5 pl-14 pr-32 bg-slate-950/70 shadow-glass-inset border border-white/10 rounded-2xl text-slate-100 placeholder-slate-500 focus:outline-none focus:border-blue-500/50 text-sm sm:text-base">
             <i class="ph ph-magnifying-glass absolute left-5 text-2xl text-slate-400"></i>
             <button onclick="window.scrollToPage('apks')" class="absolute right-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-fuchsia-600 hover:from-blue-500 hover:to-fuchsia-500 text-white font-semibold text-xs sm:text-sm transition-all shadow-glow-blue hover:scale-105">
               Jelajah
@@ -207,12 +193,11 @@ function renderLandingPage() {
           <h2 class="text-2xl font-bold text-slate-100">Daftar APK Mod</h2>
           <p class="text-xs text-slate-400">Katalog aplikasi yang siap diunduh</p>
         </div>
-        
+
         <!-- Category Quick Pills -->
         <div class="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0 no-scrollbar">
           ${state.categories.map(cat => `
-            <button onclick="window.setCategory('${cat}')" 
-                    class="px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${state.selectedCategory === cat ? 'bg-blue-600/80 text-white shadow-glow-blue border border-blue-400/40' : 'bg-white/5 border border-white/10 text-slate-400 hover:text-white'}">
+            <button onclick="window.setCategory('${cat}')" class="px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${state.selectedCategory === cat ? 'bg-blue-600/80 text-white shadow-glow-blue border border-blue-400/40' : 'bg-white/5 border border-white/10 text-slate-400 hover:text-white'}">
               ${cat}
             </button>
           `).join('')}
@@ -236,7 +221,7 @@ function renderApkListingPage() {
         <h1 class="text-3xl font-black text-slate-100">Katalog APK Mod</h1>
         <p class="text-sm text-slate-400 mt-1">Temukan semua koleksi aplikasi & game modifikasi</p>
       </div>
-
+      
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         ${state.filteredApks.length > 0 ? state.filteredApks.map(apk => renderApkCard(apk)).join('') : renderEmptyState()}
       </div>
@@ -256,17 +241,11 @@ function renderApkCard(apk, isFeatured = false) {
   const downloads = apk.download_count ?? apk.downloads ?? 0;
 
   return `
-    <div onclick="window.scrollToPage('detail', '${apk.slug}')" 
-         class="group relative bg-white/[0.04] glass-effect-tier1 border border-white/10 hover:border-white/30 rounded-3xl p-5 transition-all duration-300 hover:-translate-y-1.5 shadow-glass-card cursor-pointer flex flex-col justify-between hover:bg-white/[0.08]">
-      
+    <div onclick="window.scrollToPage('detail', '${apk.slug}')" class="group relative bg-white/[0.04] glass-effect-tier1 border border-white/10 hover:border-white/30 rounded-3xl p-5 transition-all duration-300 hover:-translate-y-1.5 shadow-glass-card cursor-pointer flex flex-col justify-between hover:bg-white/[0.08]">
       <div>
         <!-- Top Info Header -->
         <div class="flex items-start gap-4">
-          <img src="${icon}" 
-               onerror="this.src='/media/logo.png'" 
-               alt="${title}" 
-               class="w-16 h-16 rounded-2xl object-cover bg-slate-800 border border-white/10 shadow-md group-hover:scale-105 transition-transform duration-300">
-          
+          <img src="${icon}" onerror="this.src='/media/logo.png'" alt="${title}" class="w-16 h-16 rounded-2xl object-cover bg-slate-800 border border-white/10 shadow-md group-hover:scale-105 transition-transform duration-300">
           <div class="flex-grow min-w-0">
             <span class="inline-block px-2.5 py-0.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-[10px] font-semibold text-blue-400 mb-1">
               ${category}
@@ -316,7 +295,7 @@ async function renderApkDetailPage(container, slug) {
     }
 
     const apk = result.data;
-
+    
     // Record View ke API
     let latestViews = (apk.view_count || 0) + 1;
     try {
@@ -342,17 +321,14 @@ async function renderApkDetailPage(container, slug) {
         <!-- ELEVATED GLASS CARD (TIER 3) -->
         <div class="bg-slate-900/50 glass-effect-tier3 border border-white/15 rounded-3xl p-6 sm:p-8 shadow-glass-card">
           <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6 text-center sm:text-left">
-            <img src="${apk.icon_url || '/media/logo.png'}" 
-                 onerror="this.src='/media/logo.png'" 
-                 class="w-28 h-28 rounded-3xl object-cover border border-white/15 shadow-2xl">
-            
+            <img src="${apk.icon_url || '/media/logo.png'}" onerror="this.src='/media/logo.png'" class="w-28 h-28 rounded-3xl object-cover border border-white/15 shadow-2xl">
             <div class="flex-grow space-y-2">
               <span class="inline-block px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-xs font-semibold text-blue-400">
                 ${apk.category || 'General'}
               </span>
               <h1 class="text-2xl sm:text-4xl font-black text-slate-100">${apk.title}</h1>
               <p class="text-sm text-slate-400 font-medium">Pengembang: <span class="text-slate-200">${apk.developer || 'Unknown'}</span></p>
-
+              
               <div class="flex flex-wrap items-center justify-center sm:justify-start gap-4 pt-2 text-xs text-slate-400">
                 <span class="flex items-center gap-1.5"><i class="ph ph-tag text-blue-400"></i> v${apk.version}</span>
                 <span class="flex items-center gap-1.5"><i class="ph ph-hard-drive text-fuchsia-400"></i> ${apk.file_size || 'N/A'}</span>
@@ -371,8 +347,16 @@ async function renderApkDetailPage(container, slug) {
             </div>
           ` : ''}
 
+          <!-- SLOT IKLAN 2 (DOWNLOAD ZONE HIGH-CTR) -->
+          <div class="mt-8 p-4 rounded-2xl bg-slate-950/60 border border-amber-500/20 text-center space-y-2">
+            <span class="text-[9px] uppercase tracking-wider text-amber-400 font-bold">Iklan Sponsor Unduhan</span>
+            <div class="flex justify-center my-2">
+              <script src="https://pl31338531.profitableratecpmnetwork.com/f1/c2/95/f1c295834220933b78e26ac0b2bc7b28.js"><\/script>
+            </div>
+          </div>
+
           <!-- SECTION SERVER UNDUHAN -->
-          <div class="mt-8 pt-6 border-t border-white/10 space-y-4">
+          <div class="mt-6 pt-6 border-t border-white/10 space-y-4">
             <div class="flex items-center justify-between">
               <h3 class="text-sm font-bold text-slate-200 flex items-center gap-2">
                 <i class="ph ph-hard-drives text-blue-400"></i> Server Unduhan Terverifikasi (${servers.length || 1})
@@ -381,32 +365,26 @@ async function renderApkDetailPage(container, slug) {
                 100% Bebas Virus
               </span>
             </div>
-            
+
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="download-servers-container">
-              ${servers.length > 0 ? 
-                servers.map((server, idx) => `
-                  <button id="dl-btn-${server.id}"
-                          onclick="window.triggerDownload('${apk.id}', '${server.id}', 'dl-btn-${server.id}')" 
-                          class="group relative flex items-center justify-between p-4 rounded-2xl bg-white/[0.04] glass-effect-tier1 border border-white/10 hover:border-blue-500/40 hover:bg-blue-600/10 text-slate-200 font-semibold text-sm transition-all shadow-glass-panel hover:scale-[1.01]">
-                    <div class="flex items-center gap-3">
-                      <div class="w-9 h-9 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform">
-                        <i class="ph ph-cloud-arrow-down text-lg"></i>
-                      </div>
-                      <div class="text-left">
-                        <div class="text-slate-100 font-bold text-xs sm:text-sm">${server.server_name}</div>
-                        <div class="text-[10px] text-slate-400 font-normal">Server #${idx + 1} • Kencang & Stabil</div>
-                      </div>
+              ${servers.length > 0 ? servers.map((server, idx) => `
+                <button id="dl-btn-${server.id}" onclick="window.triggerDownload('${apk.id}', '${server.id}', 'dl-btn-${server.id}')" class="group relative flex items-center justify-between p-4 rounded-2xl bg-white/[0.04] glass-effect-tier1 border border-white/10 hover:border-blue-500/40 hover:bg-blue-600/10 text-slate-200 font-semibold text-sm transition-all shadow-glass-panel hover:scale-[1.01]">
+                  <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform">
+                      <i class="ph ph-cloud-arrow-down text-lg"></i>
                     </div>
-                    <i class="ph ph-arrow-square-out text-lg text-slate-400 group-hover:text-blue-400 transition-colors"></i>
-                  </button>
-                `).join('') 
-                : 
-                `<button id="dl-btn-main"
-                        onclick="window.triggerDownload('${apk.id}', null, 'dl-btn-main')" 
-                        class="w-full flex items-center justify-center gap-3 p-4 rounded-2xl bg-gradient-to-r from-blue-600 to-fuchsia-600 hover:from-blue-500 hover:to-fuchsia-500 text-white font-bold text-base shadow-glow-blue transition-all hover:scale-[1.01]">
+                    <div class="text-left">
+                      <div class="text-slate-100 font-bold text-xs sm:text-sm">${server.server_name}</div>
+                      <div class="text-[10px] text-slate-400 font-normal">Server #${idx + 1} • Kencang & Stabil</div>
+                    </div>
+                  </div>
+                  <i class="ph ph-arrow-square-out text-lg text-slate-400 group-hover:text-blue-400 transition-colors"></i>
+                </button>
+              `).join('') : `
+                <button id="dl-btn-main" onclick="window.triggerDownload('${apk.id}', null, 'dl-btn-main')" class="w-full flex items-center justify-center gap-3 p-4 rounded-2xl bg-gradient-to-r from-blue-600 to-fuchsia-600 hover:from-blue-500 hover:to-fuchsia-500 text-white font-bold text-base shadow-glow-blue transition-all hover:scale-[1.01]">
                   <i class="ph ph-download-simple text-xl"></i> Unduh APK Sekarang
-                </button>`
-              }
+                </button>
+              `}
             </div>
           </div>
         </div>
@@ -452,14 +430,11 @@ window.triggerDownload = async function(apkId, serverId = null, btnId = null) {
     const result = await res.json();
 
     if (res.ok && result.download_url) {
-      // Update angka download count di layar secara realtime
       const dlCountElem = document.getElementById('detail-download-count');
       if (dlCountElem && result.download_count) {
         dlCountElem.textContent = result.download_count;
       }
-
       showToast("Unduhan dimulai via " + (result.server_name || "Server Utama"), "success");
-      
       setTimeout(() => {
         window.open(result.download_url, '_blank');
       }, 800);
@@ -478,7 +453,6 @@ window.triggerDownload = async function(apkId, serverId = null, btnId = null) {
   }
 };
 
-
 // 8. UTILITIES & HELPER FUNCTIONS
 window.toggleDrawer = function(drawerId) {
   const overlay = document.getElementById('drawer-overlay');
@@ -486,7 +460,6 @@ window.toggleDrawer = function(drawerId) {
   if (!drawer || !overlay) return;
 
   overlay.classList.remove('opacity-0', 'pointer-events-none');
-  
   if (drawerId === 'mobile-menu-drawer') drawer.classList.remove('translate-x-full');
   if (drawerId === 'filter-drawer') drawer.classList.remove('-translate-x-full');
   if (drawerId === 'search-drawer') drawer.classList.remove('-translate-y-full');
@@ -522,10 +495,9 @@ window.handleSearchInput = function(val) {
 function renderCategoryDrawer() {
   const container = document.getElementById('category-drawer-list');
   if (!container) return;
-
+  
   container.innerHTML = state.categories.map(cat => `
-    <button onclick="window.setCategory('${cat}')" 
-            class="w-full flex items-center justify-between px-4 py-3 rounded-2xl text-sm font-medium transition ${state.selectedCategory === cat ? 'bg-blue-600/80 text-white shadow-glow-blue' : 'bg-white/5 text-slate-300 hover:bg-white/10'}">
+    <button onclick="window.setCategory('${cat}')" class="w-full flex items-center justify-between px-4 py-3 rounded-2xl text-sm font-medium transition ${state.selectedCategory === cat ? 'bg-blue-600/80 text-white shadow-glow-blue' : 'bg-white/5 text-slate-300 hover:bg-white/10'}">
       <span>${cat}</span>
       <i class="ph ph-chevron-right text-xs"></i>
     </button>
@@ -563,7 +535,7 @@ function showToast(message, type = 'info') {
 
   const toast = document.createElement('div');
   const bgClass = type === 'error' ? 'bg-red-500/80 border-red-500/40' : type === 'success' ? 'bg-emerald-500/80 border-emerald-500/40' : 'bg-blue-600/80 border-blue-500/40';
-
+  
   toast.className = `pointer-events-auto px-4 py-3 rounded-2xl text-white font-medium text-xs glass-effect-tier3 border shadow-2xl flex items-center gap-2 transition-all duration-300 transform translate-y-2 opacity-0 ${bgClass}`;
   toast.innerHTML = `<i class="ph ph-info text-base"></i> ${message}`;
 
