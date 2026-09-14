@@ -1,23 +1,26 @@
 const express = require('express');
 const router = express.Router();
-const {
-  getAllApks,
-  getApkBySlug,
-  createApk,
-  updateApk,
-  deleteApk,
-  toggleApkStatus
+const { 
+  getApks, 
+  getApkBySlug, 
+  createApk, 
+  updateApk, 
+  deleteApk, 
+  toggleApkStatus 
 } = require('../controllers/apkController');
-const requireAdminAuth = require('../middleware/authMiddleware');
 
-// Route Publik
-router.get('/', getAllApks);
+// Import middleware auth (Ambil fungsinya dari object)
+const authMiddleware = require('../middlewares/authMiddleware');
+const verifyAdmin = authMiddleware.verifyAdminToken || authMiddleware.verifyToken || authMiddleware;
+
+// Public routes
+router.get('/', getApks);
 router.get('/:slug', getApkBySlug);
 
-// Route Admin
-router.post('/', requireAdminAuth, createApk);
-router.put('/:id', requireAdminAuth, updateApk);
-router.delete('/:id', requireAdminAuth, deleteApk);
-router.patch('/:id/status', requireAdminAuth, toggleApkStatus);
+// Admin protected routes (Menggunakan verifyAdmin yang berupa FUNCTION)
+router.post('/', verifyAdmin, createApk);
+router.put('/:id', verifyAdmin, updateApk);
+router.delete('/:id', verifyAdmin, deleteApk);
+router.patch('/:id/status', verifyAdmin, toggleApkStatus);
 
 module.exports = router;
