@@ -348,12 +348,7 @@ async function renderApkDetailPage(container, slug) {
           ` : ''}
 
           <!-- SLOT IKLAN 2 (DOWNLOAD ZONE HIGH-CTR) -->
-          <div class="mt-8 p-4 rounded-2xl bg-slate-950/60 border border-amber-500/20 text-center space-y-2">
-            <span class="text-[9px] uppercase tracking-wider text-amber-400 font-bold">Iklan Sponsor Unduhan</span>
-            <div class="flex justify-center my-2">
-              <script src="https://pl31338531.profitableratecpmnetwork.com/f1/c2/95/f1c295834220933b78e26ac0b2bc7b28.js"><\/script>
-            </div>
-          </div>
+          
 
           <!-- SECTION SERVER UNDUHAN -->
           <div class="mt-6 pt-6 border-t border-white/10 space-y-4">
@@ -407,20 +402,48 @@ async function renderApkDetailPage(container, slug) {
 
 // TRIGGER DOWNLOAD WITH LOADING STATE & REALTIME COUNT UPDATE
 window.triggerDownload = async function(apkId, serverId = null, btnId = null) {
+// Variable simpan status klik per APK
+const downloadClickTracker = {};
+
+window.triggerDownload = async function(apkId, serverId = null, btnId = null) {
+  const DIRECT_LINK = "https://omg10.com/4/11803927";
+  
+  // Inisialisasi hitungan klik untuk APK ini jika belum ada
+  if (!downloadClickTracker[apkId]) {
+    downloadClickTracker[apkId] = 0;
+  }
+
+  // Tambah hitungan klik
+  downloadClickTracker[apkId] += 1;
+  const currentClicks = downloadClickTracker[apkId];
+
+  // KLIK KE-1 ATAU KE-2 -> LEWATKAN KE DIRECTLINK IKLAN
+  if (currentClicks < 3) {
+    const sisa = 3 - currentClicks;
+    showToast(`Langkah ${currentClicks}/3: Klik ${sisa}x lagi untuk mengunduh!`, "info");
+    
+    // Buka Iklan Directlink di Tab Baru
+    window.open(DIRECT_LINK, '_blank');
+    return;
+  }
+
+  // KLIK KE-3 -> UNDUHAN ASLI BERJALAN & RESET TRACKER
+  downloadClickTracker[apkId] = 0; // Reset ke 0
+  
   const btn = btnId ? document.getElementById(btnId) : null;
   const originalHtml = btn ? btn.innerHTML : '';
 
   if (btn) {
     btn.disabled = true;
     btn.innerHTML = `
-      <div class="flex items-center gap-2 text-xs font-bold text-blue-400 mx-auto">
-        <div class="w-4 h-4 border-2 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
-        Menyiapkan Tautan...
+      <div class="flex items-center gap-2 text-xs font-bold text-emerald-400 mx-auto">
+        <div class="w-4 h-4 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin"></div>
+        Membuka File Asli...
       </div>
     `;
   }
 
-  showToast("Menyiapkan unduhan aman...", "info");
+  showToast("Verifikasi sukses! Menyiapkan file unduhan...", "success");
 
   try {
     let url = `${API_BASE}/traffic/download/${apkId}`;
@@ -434,10 +457,10 @@ window.triggerDownload = async function(apkId, serverId = null, btnId = null) {
       if (dlCountElem && result.download_count) {
         dlCountElem.textContent = result.download_count;
       }
-      showToast("Unduhan dimulai via " + (result.server_name || "Server Utama"), "success");
+      
       setTimeout(() => {
         window.open(result.download_url, '_blank');
-      }, 800);
+      }, 500);
     } else {
       showToast(result.message || "Server unduhan tidak tersedia.", "error");
     }
@@ -448,10 +471,11 @@ window.triggerDownload = async function(apkId, serverId = null, btnId = null) {
       setTimeout(() => {
         btn.disabled = false;
         btn.innerHTML = originalHtml;
-      }, 1500);
+      }, 1000);
     }
   }
 };
+
 
 // 8. UTILITIES & HELPER FUNCTIONS
 window.toggleDrawer = function(drawerId) {
