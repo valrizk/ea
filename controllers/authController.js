@@ -1,7 +1,4 @@
-const jwt = require('jsonwebtoken');
-
-const JWT_SECRET = process.env.JWT_SECRET || 'vrizmods_secret_key_2026';
-
+// Auth Controller Tanpa JWT
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -15,17 +12,11 @@ const login = async (req, res) => {
       });
     }
 
-    const token = jwt.sign(
-      { role: 'admin', email: ADMIN_EMAIL },
-      JWT_SECRET,
-      { expiresIn: '7d' }
-    );
-
     res.json({
       status: 'success',
       message: 'Login Admin berhasil!',
       data: {
-        access_token: token,
+        access_token: 'dummy-simple-token-2026',
         user: { email: ADMIN_EMAIL, role: 'admin' }
       }
     });
