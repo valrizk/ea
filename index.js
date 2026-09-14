@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
-// Logger Middleware untuk Terminal Termux
+// Logger
 app.use((req, res, next) => {
   console.log(`[TERMINAL LOG] ${new Date().toLocaleTimeString()} - ${req.method} ${req.url}`);
   next();
@@ -25,12 +25,17 @@ app.use('/media', express.static(path.join(__dirname, 'media')));
 app.use('/admin', express.static(path.join(__dirname, 'public/admin')));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// API Routes Utama
+// API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/apks', apkRoutes);
 app.use('/api/servers', serverRoutes);
 app.use('/api/traffic', trafficRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+
+// Explicit Admin Route Handler
+app.get('/admin*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'admin', 'index.html'));
+});
 
 // Fallback Route SPA Publik
 app.get('*', (req, res) => {
@@ -40,19 +45,10 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Middleware Handler Error URI
-app.use((err, req, res, next) => {
-  if (err instanceof URIError) {
-    return res.status(400).json({
-      status: 'fail',
-      message: 'URL tidak valid atau mengandung karakter terlarang.'
-    });
-  }
-  next(err);
-});
+module.exports = app;
 
-app.listen(PORT, () => {
-  console.log(`=================================================`);
-  console.log(`Server VRIZMODS aktif di http://localhost:${PORT}`);
-  console.log(`=================================================`);
-});
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Server running at http://localhost:${PORT}`);
+  });
+}
