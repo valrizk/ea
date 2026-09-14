@@ -53,7 +53,7 @@ async function fetchApksFromBackend() {
     }
   } catch (err) {
     showToast('Koneksi backend terputus', 'error');
-  } finally {
+  } font-medium {
     state.loading = false;
     renderView();
   }
@@ -136,11 +136,10 @@ function renderView() {
   appRoot.innerHTML = renderLandingPage();
 }
 
-// 4. VIEWS COMPONENTS (3D GLASSMORPHISM TIERED LAYERS)
+// 4. VIEWS COMPONENTS
 function renderLandingPage() {
   const featured = state.apks.slice(0, 3);
   return `
-    <!-- HERO SECTION (GLASS TIER 2 HERO PANEL) -->
     <section class="relative py-12 md:py-16 text-center">
       <div class="relative z-10 p-8 sm:p-12 rounded-3xl bg-slate-900/30 glass-effect-tier2 border border-white/15 shadow-glass-card max-w-5xl mx-auto">
         <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-xs font-semibold text-blue-400 mb-6 backdrop-blur-md">
@@ -158,7 +157,6 @@ function renderLandingPage() {
           Pengalaman mengunduh file APK modifikasi dengan visual 3D frosted glass, responsif, dan terproteksi dari malware.
         </p>
 
-        <!-- INSET GLASS SEARCH BAR -->
         <div class="mt-8 max-w-2xl mx-auto relative px-2">
           <div class="relative flex items-center">
             <input type="text" oninput="window.handleSearchInput(this.value)" value="${state.searchQuery}" placeholder="Cari game mod, MLBB, GTA, Canva..." class="w-full py-4 sm:py-4.5 pl-14 pr-32 bg-slate-950/70 shadow-glass-inset border border-white/10 rounded-2xl text-slate-100 placeholder-slate-500 focus:outline-none focus:border-blue-500/50 text-sm sm:text-base">
@@ -171,7 +169,6 @@ function renderLandingPage() {
       </div>
     </section>
 
-    <!-- FEATURED APKS -->
     ${featured.length > 0 ? `
       <section class="mt-12">
         <div class="flex items-center justify-between mb-6">
@@ -186,7 +183,6 @@ function renderLandingPage() {
       </section>
     ` : ''}
 
-    <!-- ALL APKS SECTION -->
     <section class="mt-16">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
@@ -194,7 +190,6 @@ function renderLandingPage() {
           <p class="text-xs text-slate-400">Katalog aplikasi yang siap diunduh</p>
         </div>
 
-        <!-- Category Quick Pills -->
         <div class="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0 no-scrollbar">
           ${state.categories.map(cat => `
             <button onclick="window.setCategory('${cat}')" class="px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${state.selectedCategory === cat ? 'bg-blue-600/80 text-white shadow-glow-blue border border-blue-400/40' : 'bg-white/5 border border-white/10 text-slate-400 hover:text-white'}">
@@ -204,7 +199,6 @@ function renderLandingPage() {
         </div>
       </div>
 
-      <!-- APK CARDS GRID -->
       ${state.filteredApks.length > 0 ? `
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           ${state.filteredApks.map(apk => renderApkCard(apk)).join('')}
@@ -229,7 +223,6 @@ function renderApkListingPage() {
   `;
 }
 
-// 5. GLASS CARD COMPONENT (TIER 1 & HOVER LUMINOUS HIGHLIGHT)
 function renderApkCard(apk, isFeatured = false) {
   const title = apk.title || apk.name || 'Untitled APK';
   const icon = apk.icon_url || apk.icon || '/media/logo.png';
@@ -243,7 +236,6 @@ function renderApkCard(apk, isFeatured = false) {
   return `
     <div onclick="window.scrollToPage('detail', '${apk.slug}')" class="group relative bg-white/[0.04] glass-effect-tier1 border border-white/10 hover:border-white/30 rounded-3xl p-5 transition-all duration-300 hover:-translate-y-1.5 shadow-glass-card cursor-pointer flex flex-col justify-between hover:bg-white/[0.08]">
       <div>
-        <!-- Top Info Header -->
         <div class="flex items-start gap-4">
           <img src="${icon}" onerror="this.src='/media/logo.png'" alt="${title}" class="w-16 h-16 rounded-2xl object-cover bg-slate-800 border border-white/10 shadow-md group-hover:scale-105 transition-transform duration-300">
           <div class="flex-grow min-w-0">
@@ -257,7 +249,6 @@ function renderApkCard(apk, isFeatured = false) {
           </div>
         </div>
 
-        <!-- Mod Feature Highlight -->
         ${modFeatures ? `
           <div class="mt-4 p-3 rounded-2xl bg-slate-950/40 shadow-glass-inset border border-white/5">
             <p class="text-xs text-emerald-400 font-medium line-clamp-2 flex items-center gap-1.5">
@@ -267,7 +258,6 @@ function renderApkCard(apk, isFeatured = false) {
         ` : ''}
       </div>
 
-      <!-- Footer Metadata & Action -->
       <div class="mt-5 pt-4 border-t border-white/10 flex items-center justify-between text-xs text-slate-400">
         <div class="flex items-center gap-3">
           <span class="flex items-center gap-1"><i class="ph ph-eye text-sm text-slate-500"></i> ${views}</span>
@@ -281,7 +271,7 @@ function renderApkCard(apk, isFeatured = false) {
   `;
 }
 
-// DETAIL PAGE & MULTI-SERVER DOWNLOAD SWITCHER 2026
+// DETAIL PAGE
 async function renderApkDetailPage(container, slug) {
   container.innerHTML = renderSkeletonLoading();
 
@@ -296,7 +286,6 @@ async function renderApkDetailPage(container, slug) {
 
     const apk = result.data;
     
-    // Record View ke API
     let latestViews = (apk.view_count || 0) + 1;
     try {
       const viewRes = await fetch(`${API_BASE}/traffic/view/${apk.id}`, { method: 'POST' });
@@ -318,7 +307,6 @@ async function renderApkDetailPage(container, slug) {
           <i class="ph ph-arrow-left text-base"></i> Kembali ke Beranda
         </button>
 
-        <!-- ELEVATED GLASS CARD (TIER 3) -->
         <div class="bg-slate-900/50 glass-effect-tier3 border border-white/15 rounded-3xl p-6 sm:p-8 shadow-glass-card">
           <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6 text-center sm:text-left">
             <img src="${apk.icon_url || '/media/logo.png'}" onerror="this.src='/media/logo.png'" class="w-28 h-28 rounded-3xl object-cover border border-white/15 shadow-2xl">
@@ -347,11 +335,8 @@ async function renderApkDetailPage(container, slug) {
             </div>
           ` : ''}
 
-          <!-- SLOT IKLAN 2 (DOWNLOAD ZONE HIGH-CTR) -->
-          
-
           <!-- SECTION SERVER UNDUHAN -->
-          <div class="mt-6 pt-6 border-t border-white/10 space-y-4">
+          <div class="mt-8 pt-6 border-t border-white/10 space-y-4">
             <div class="flex items-center justify-between">
               <h3 class="text-sm font-bold text-slate-200 flex items-center gap-2">
                 <i class="ph ph-hard-drives text-blue-400"></i> Server Unduhan Terverifikasi (${servers.length || 1})
@@ -384,7 +369,6 @@ async function renderApkDetailPage(container, slug) {
           </div>
         </div>
 
-        <!-- Deskripsi Card -->
         <div class="bg-white/[0.04] glass-effect-tier1 border border-white/10 rounded-3xl p-6 sm:p-8 space-y-4 shadow-glass-card">
           <h2 class="text-lg font-bold text-slate-100 flex items-center gap-2">
             <i class="ph ph-article text-blue-400"></i> Deskripsi & Informasi Detail
@@ -400,35 +384,27 @@ async function renderApkDetailPage(container, slug) {
   }
 }
 
-// TRIGGER DOWNLOAD WITH LOADING STATE & REALTIME COUNT UPDATE
-window.triggerDownload = async function(apkId, serverId = null, btnId = null) {
-// Variable simpan status klik per APK
+// 5. TRIGGER DOWNLOAD (LOGIC DIRECTLINK 3X KLIK)
 const downloadClickTracker = {};
 
 window.triggerDownload = async function(apkId, serverId = null, btnId = null) {
   const DIRECT_LINK = "https://omg10.com/4/11803927";
   
-  // Inisialisasi hitungan klik untuk APK ini jika belum ada
   if (!downloadClickTracker[apkId]) {
     downloadClickTracker[apkId] = 0;
   }
 
-  // Tambah hitungan klik
   downloadClickTracker[apkId] += 1;
   const currentClicks = downloadClickTracker[apkId];
 
-  // KLIK KE-1 ATAU KE-2 -> LEWATKAN KE DIRECTLINK IKLAN
   if (currentClicks < 3) {
     const sisa = 3 - currentClicks;
     showToast(`Langkah ${currentClicks}/3: Klik ${sisa}x lagi untuk mengunduh!`, "info");
-    
-    // Buka Iklan Directlink di Tab Baru
     window.open(DIRECT_LINK, '_blank');
     return;
   }
 
-  // KLIK KE-3 -> UNDUHAN ASLI BERJALAN & RESET TRACKER
-  downloadClickTracker[apkId] = 0; // Reset ke 0
+  downloadClickTracker[apkId] = 0;
   
   const btn = btnId ? document.getElementById(btnId) : null;
   const originalHtml = btn ? btn.innerHTML : '';
@@ -476,8 +452,7 @@ window.triggerDownload = async function(apkId, serverId = null, btnId = null) {
   }
 };
 
-
-// 8. UTILITIES & HELPER FUNCTIONS
+// 6. UTILITIES
 window.toggleDrawer = function(drawerId) {
   const overlay = document.getElementById('drawer-overlay');
   const drawer = document.getElementById(drawerId);
