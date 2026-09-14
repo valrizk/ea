@@ -37,6 +37,7 @@ function setupEventListeners() {
 }
 
 // 1. FETCH API DATABASES
+// 1. FETCH API DATABASES
 async function fetchApksFromBackend() {
   state.loading = true;
   renderView();
@@ -53,7 +54,7 @@ async function fetchApksFromBackend() {
     }
   } catch (err) {
     showToast('Koneksi backend terputus', 'error');
-  } font-medium {
+  } finally {
     state.loading = false;
     renderView();
   }
