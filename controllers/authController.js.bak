@@ -1,53 +1,41 @@
-const supabase = require('../config/supabase');
+const jwt = require('jsonwebtoken');
 
-// Controller untuk Login Admin
-const loginAdmin = async (req, res) => {
+const JWT_SECRET = process.env.JWT_SECRET || 'vrizmods_secret_key_2026';
+
+// Endpoint Login Admin
+const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Validasi input sederhana
-    if (!email || !password) {
-      return res.status(400).json({
-        status: 'fail',
-        message: 'Email dan password wajib diisi.'
-      });
-    }
+    // Kredensial Admin VRIZMODS
+    const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'vriz@vrizmods.local';
+    const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '12345';
 
-    // Melakukan autentikasi via Supabase Auth
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password
-    });
-
-    if (error) {
+    if (email !== ADMIN_EMAIL || password !== ADMIN_PASSWORD) {
       return res.status(401).json({
         status: 'fail',
-        message: 'Email atau password salah.'
+        message: 'Email atau password admin salah!'
       });
     }
 
-    // Mengembalikan access token (JWT) dan data user jika sukses
-    return res.status(200).json({
+    // Generate JWT Token
+    const token = jwt.sign(
+      { role: 'admin', email: ADMIN_EMAIL },
+      JWT_SECRET,
+      { expiresIn: '7d' }
+    );
+
+    res.json({
       status: 'success',
       message: 'Login Admin berhasil!',
       data: {
-        access_token: data.session.access_token,
-        token_type: data.session.token_type,
-        expires_in: data.session.expires_in,
-        user: {
-          id: data.user.id,
-          email: data.user.email
-        }
+        access_token: token,
+        user: { email: ADMIN_EMAIL, role: 'admin' }
       }
     });
   } catch (err) {
-    return res.status(500).json({
-      status: 'error',
-      message: err.message
-    });
+    res.status(500).json({ status: 'error', message: err.message });
   }
 };
 
-module.exports = {
-  loginAdmin
-};
+module.exports = { login };

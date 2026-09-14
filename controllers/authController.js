@@ -2,12 +2,9 @@ const jwt = require('jsonwebtoken');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'vrizmods_secret_key_2026';
 
-// Endpoint Login Admin
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-
-    // Kredensial Admin VRIZMODS
     const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'vriz@vrizmods.local';
     const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '12345';
 
@@ -18,7 +15,6 @@ const login = async (req, res) => {
       });
     }
 
-    // Generate JWT Token
     const token = jwt.sign(
       { role: 'admin', email: ADMIN_EMAIL },
       JWT_SECRET,
