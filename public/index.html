@@ -131,7 +131,7 @@
 
   <!-- MAIN APP CONTAINER -->
   <main id="app-root" class="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 transition-all duration-300">
-    <!-- Dynamic Content Here -->
+    <!-- Dynamic Content Rendered by app.js -->
   </main>
 
   <!-- DRAWERS -->
@@ -201,7 +201,7 @@
     </div>
   </footer>
 
-  <!-- MONETAG SERVICE WORKER -->
+  <!-- 1. MONETAG SERVICE WORKER REGISTER -->
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
@@ -212,11 +212,34 @@
     }
   </script>
 
-  
+  <!-- 2. ADS INJECTOR (POPUNDER + SOCIAL BAR + ONE CLICK ZONE 11803990) -->
+  <script>
+    window.addEventListener('load', function() {
+      // A. Muat Script One Click Tag (Zone: 11803990)
+      try {
+        (function(s){
+          s.dataset.zone='11803990';
+          s.src='https://al5sm.com/tag.min.js';
+        })([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')));
+      } catch(e) { console.warn('Ads OneClick Error:', e); }
 
-    <script async src="https://versatilesentiment.com/bf/18/74/bf18749c477460bf4422b8d34797de74.js"></script>
-  <script async src="https://versatilesentiment.com/f1/c2/95/f1c295834220933b78e26ac0b2bc7b28.js"></script>
+      // B. Muat Script Popunder (versatilesentiment)
+      setTimeout(function() {
+        var s1 = document.createElement('script');
+        s1.src = 'https://versatilesentiment.com/bf/18/74/bf18749c477460bf4422b8d34797de74.js';
+        document.body.appendChild(s1);
+      }, 500);
 
+      // C. Muat Script Social Bar dengan jeda 1,2 detik
+      setTimeout(function() {
+        var s2 = document.createElement('script');
+        s2.src = 'https://versatilesentiment.com/f1/c2/95/f1c295834220933b78e26ac0b2bc7b28.js';
+        document.body.appendChild(s2);
+      }, 1200);
+    });
+  </script>
+
+  <!-- MAIN FRONTEND LOGIC -->
   <script src="/app.js"></script>
 </body>
 </html>
