@@ -7,7 +7,9 @@ const {
   deleteServer,
   toggleServerStatus
 } = require('../controllers/serverController');
-const requireAdminAuth = require('../middleware/authMiddleware');
+const authMiddleware = require('../middlewares/authMiddleware');
+const verifyAdmin = authMiddleware.verifyAdminToken || authMiddleware.verifyToken || authMiddleware;
+
 
 // Semua route manajemen server memerlukan autentikasi Admin
 router.post('/', requireAdminAuth, addServer);
