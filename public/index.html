@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>VRIZMODS — Alwys Update And Work</title>
+  <title>VRIZMODS — Premium Glassmorphism Mod Platform</title>
 
   <!-- Tailwind CSS Engine -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -54,7 +54,6 @@
       -moz-osx-font-smoothing: grayscale;
       background-color: #030712;
     }
-    /* Safari & Cross-Browser Fallback */
     .glass-effect-tier1 {
       -webkit-backdrop-filter: blur(12px);
       backdrop-filter: blur(12px);
@@ -76,28 +75,21 @@
 
   <!-- Phosphor Icons -->
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
-
-  <!-- ==================== IKLAN 1 (GLOBAL HEAD SCRIPT) ==================== -->
-  <script src="https://pl31334331.profitableratecpmnetwork.com/bf/18/74/bf18749c477460bf4422b8d34797de74.js"></script>
 </head>
 <body class="text-slate-100 font-sans min-h-screen flex flex-col antialiased overflow-x-hidden relative">
 
-  <!-- ATMOSPHERIC BACKGROUND (FLOATING GLOW ORBS) -->
+  <!-- ATMOSPHERIC BACKGROUND -->
   <div class="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
-    <!-- Orb 1: Blue -->
     <div class="absolute -top-20 -left-20 w-[500px] h-[500px] bg-blue-600/25 rounded-full filter blur-[120px] will-change-transform animate-pulse"></div>
-    <!-- Orb 2: Magenta -->
     <div class="absolute top-1/3 -right-20 w-[450px] h-[450px] bg-fuchsia-600/20 rounded-full filter blur-[130px] will-change-transform"></div>
-    <!-- Orb 3: Cyan -->
     <div class="absolute -bottom-20 left-1/3 w-[550px] h-[550px] bg-cyan-500/15 rounded-full filter blur-[140px] will-change-transform"></div>
   </div>
 
-  <!-- GLASS NAVBAR (TIER 2 GLASS) -->
+  <!-- NAVBAR -->
   <header class="sticky top-0 z-40 bg-slate-950/40 glass-effect-tier2 border-b border-white/10 transition-all duration-300">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-20">
         
-        <!-- Brand Logo -->
         <a href="/" onclick="event.preventDefault(); window.scrollToPage('home')" class="flex items-center space-x-3 group">
           <div class="relative w-11 h-11 rounded-2xl bg-gradient-to-tr from-blue-500 via-indigo-500 to-fuchsia-500 p-[1.5px] transition-transform duration-300 group-hover:scale-105 shadow-glow-blue">
             <div class="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center overflow-hidden">
@@ -112,7 +104,6 @@
           </div>
         </a>
 
-        <!-- Desktop Navigation -->
         <nav class="hidden md:flex items-center space-x-8">
           <button onclick="window.scrollToPage('home')" class="text-sm font-semibold text-slate-300 hover:text-blue-400 transition-colors flex items-center gap-2">
             <i class="ph ph-house text-lg"></i> Beranda
@@ -125,7 +116,6 @@
           </button>
         </nav>
 
-        <!-- Right Action Button / Drawer Trigger (Mobile) -->
         <div class="flex items-center space-x-3">
           <button onclick="window.toggleDrawer('search-drawer')" class="p-2.5 rounded-2xl bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 hover:text-white transition shadow-glass-panel">
             <i class="ph ph-magnifying-glass text-xl"></i>
@@ -139,24 +129,14 @@
     </div>
   </header>
 
-  <!-- MAIN APP DISPLAY -->
+  <!-- MAIN APP CONTAINER -->
   <main id="app-root" class="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 transition-all duration-300">
-    
-    <!-- ==================== IKLAN 2 (BANNEER TOP HIGH CTR) ==================== -->
-    <div class="w-full mb-6 p-4 rounded-3xl bg-slate-900/50 glass-effect-tier1 border border-white/10 flex flex-col items-center justify-center text-center shadow-glass-card">
-      <span class="text-[9px] uppercase tracking-widest text-slate-400 mb-2 font-bold">Sponsor / Dynamic Ads</span>
-      <div id="ad-slot-top" class="w-full flex justify-center">
-        <script src="https://pl31338531.profitableratecpmnetwork.com/f1/c2/95/f1c295834220933b78e26ac0b2bc7b28.js"></script>
-      </div>
-    </div>
-
-    <!-- Rendered dynamically by app.js -->
+    <!-- Dynamic Content Here -->
   </main>
 
-  <!-- DRAWER OVERLAY & SYSTEM (GLASS TIER 3) -->
+  <!-- DRAWERS -->
   <div id="drawer-overlay" class="fixed inset-0 z-50 bg-slate-950/60 glass-effect-tier2 opacity-0 pointer-events-none transition-opacity duration-300" onclick="window.closeAllDrawers()"></div>
 
-  <!-- Mobile Menu Drawer -->
   <aside id="mobile-menu-drawer" class="fixed top-0 right-0 z-50 w-80 max-w-[85vw] h-full bg-slate-950/80 glass-effect-tier3 border-l border-white/15 transform translate-x-full transition-transform duration-300 flex flex-col justify-between p-6 shadow-2xl">
     <div>
       <div class="flex items-center justify-between pb-6 border-b border-white/10">
@@ -165,27 +145,20 @@
           <i class="ph ph-x text-xl"></i>
         </button>
       </div>
-
       <nav class="mt-6 space-y-3">
-        <button onclick="window.scrollToPage('home'); window.closeAllDrawers()" class="w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl bg-white/5 border border-white/10 text-slate-200 font-medium hover:bg-blue-600/20 hover:border-blue-500/40 transition shadow-glass-panel">
+        <button onclick="window.scrollToPage('home'); window.closeAllDrawers()" class="w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl bg-white/5 border border-white/10 text-slate-200 font-medium hover:bg-blue-600/20 transition">
           <i class="ph ph-house text-xl text-blue-400"></i> Beranda
         </button>
-        <button onclick="window.scrollToPage('apks'); window.closeAllDrawers()" class="w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl bg-white/5 border border-white/10 text-slate-200 font-medium hover:bg-fuchsia-600/20 hover:border-fuchsia-500/40 transition shadow-glass-panel">
+        <button onclick="window.scrollToPage('apks'); window.closeAllDrawers()" class="w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl bg-white/5 border border-white/10 text-slate-200 font-medium hover:bg-fuchsia-600/20 transition">
           <i class="ph ph-squares-four text-xl text-fuchsia-400"></i> Semua APK Mod
-        </button>
-        <button onclick="window.toggleDrawer('filter-drawer');" class="w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl bg-white/5 border border-white/10 text-slate-200 font-medium hover:bg-cyan-600/20 hover:border-cyan-500/40 transition shadow-glass-panel">
-          <i class="ph ph-funnel text-xl text-cyan-400"></i> Pilih Kategori
         </button>
       </nav>
     </div>
-
     <div class="pt-6 border-t border-white/10 text-center">
       <p class="text-xs text-slate-400 font-medium">VRIZMODS Glass Edition</p>
-      <p class="text-[10px] text-slate-500 mt-1">© 2026 High Quality Verified Mods</p>
     </div>
   </aside>
 
-  <!-- Filter Category Drawer -->
   <aside id="filter-drawer" class="fixed top-0 left-0 z-50 w-85 max-w-[85vw] h-full bg-slate-950/80 glass-effect-tier3 border-r border-white/15 transform -translate-x-full transition-transform duration-300 flex flex-col p-6 shadow-2xl">
     <div class="flex items-center justify-between pb-6 border-b border-white/10">
       <div class="flex items-center gap-2">
@@ -196,13 +169,9 @@
         <i class="ph ph-x text-xl"></i>
       </button>
     </div>
-
-    <div id="category-drawer-list" class="mt-6 space-y-2 overflow-y-auto flex-grow pr-1">
-      <!-- Generated via JS -->
-    </div>
+    <div id="category-drawer-list" class="mt-6 space-y-2 overflow-y-auto flex-grow pr-1"></div>
   </aside>
 
-  <!-- Search Drawer (Top Slide Inset Glass Input) -->
   <div id="search-drawer" class="fixed top-0 left-0 right-0 z-50 bg-slate-950/85 glass-effect-tier3 border-b border-white/15 transform -translate-y-full transition-transform duration-300 p-6 shadow-2xl">
     <div class="max-w-3xl mx-auto space-y-4">
       <div class="flex items-center justify-between">
@@ -218,34 +187,26 @@
     </div>
   </div>
 
-  <!-- TOAST NOTIFICATION SYSTEM -->
   <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-3 pointer-events-none"></div>
 
-  <!-- FOOTER GLASS -->
+  <!-- FOOTER -->
   <footer class="mt-auto border-t border-white/10 bg-slate-950/50 glass-effect-tier2">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div class="flex flex-col md:flex-row items-center justify-between gap-4">
         <div class="flex items-center space-x-3">
-          <div class="w-7 h-7 rounded-lg bg-gradient-to-tr from-blue-500 to-fuchsia-500 p-[1px]">
-            <div class="w-full h-full bg-slate-950 rounded-[7px] flex items-center justify-center">
-              <img src="/media/logo.png" onerror="this.src='/media/favicon.ico'" class="w-4 h-4">
-            </div>
-          </div>
           <span class="text-base font-bold bg-gradient-to-r from-blue-400 to-fuchsia-400 bg-clip-text text-transparent">VRIZMODS</span>
           <span class="text-xs text-slate-400">© 2026 VRIZMODS. All rights reserved.</span>
         </div>
-        <p class="text-xs text-slate-400 text-center md:text-right">
-          Penyedia APK Mod Terpercaya 2026
-        </p>
       </div>
     </div>
   </footer>
 
-    <script>
+  <!-- MONETAG SERVICE WORKER -->
+  <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js')
-          .then(reg => console.log('Monetag SW Registered!'))
+          .then(() => console.log('Monetag SW Active'))
           .catch(err => console.log('Monetag SW Fail:', err));
       });
     }
