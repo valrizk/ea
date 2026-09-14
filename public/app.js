@@ -62,21 +62,10 @@ async function fetchApksFromBackend() {
   }
 }
 
-async function extractCategories() {
+// Ganti fungsi extractCategories di public/app.js menjadi seperti ini:
+function extractCategories() {
   const catSet = new Set(['All']);
   
-  // Ambil dari API kategori dinamis dulu jika ada
-  try {
-    const res = await fetch(`${API_BASE}/categories`);
-    const result = await res.json();
-    if (res.ok && result.data) {
-      result.data.forEach(c => catSet.add(c.name));
-    }
-  } catch (e) {
-    console.warn('Gagal ambil kategori dinamis, fallback dari APKs');
-  }
-
-  // Tambahkan juga dari APK yang ada
   state.apks.forEach(apk => {
     if (apk.category) catSet.add(apk.category);
   });
