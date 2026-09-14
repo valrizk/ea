@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="id" class="dark scroll-smooth selection:bg-fuchsia-500 selection:text-white">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>VRIZMODS Admin — Futuristic Control Panel</title>
+
+  <!-- Tailwind CSS Engine -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            glass: {
+              surface: 'rgba(255, 255, 255, 0.05)',
+              elevated: 'rgba(255, 255, 255, 0.10)',
+              modal: 'rgba(15, 23, 42, 0.85)',
+              border: 'rgba(255, 255, 255, 0.15)',
+              inset: 'rgba(0, 0, 0, 0.35)'
+            }
+          },
+          backdropBlur: {
+            tier1: '12px',
+            tier2: '24px',
+            tier3: '40px'
+          },
+          boxShadow: {
+            'glass-card': '0 12px 40px 0 rgba(0, 0, 0, 0.45), inset 0 1px 0 0 rgba(255, 255, 255, 0.15)',
+            'glass-inset': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.5), 0 1px 0 0 rgba(255, 255, 255, 0.1)',
+            'glow-blue': '0 0 35px -5px rgba(59, 130, 246, 0.4)',
+            'glow-magenta': '0 0 35px -5px rgba(217, 70, 239, 0.4)'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      -webkit-font-smoothing: antialiased;
+      background-color: #030712;
+    }
+    .glass-tier2 {
+      -webkit-backdrop-filter: blur(24px);
+      backdrop-filter: blur(24px);
+    }
+    .glass-tier3 {
+      -webkit-backdrop-filter: blur(40px);
+      backdrop-filter: blur(40px);
+    }
+  </style>
+
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body class="text-slate-100 font-sans min-h-screen flex flex-col antialiased overflow-x-hidden relative">
+
+  <!-- ATMOSPHERIC GLOW BACKGROUND -->
+  <div class="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
+    <div class="absolute -top-30 -right-20 w-[550px] h-[550px] bg-blue-600/20 rounded-full filter blur-[140px]"></div>
+    <div class="absolute bottom-10 -left-20 w-[500px] h-[500px] bg-fuchsia-600/20 rounded-full filter blur-[150px]"></div>
+  </div>
+
+  <!-- 1. LOGIN SECTION (GLASS CARD) -->
+  <div id="login-section" class="min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-md p-8 rounded-3xl bg-white/[0.04] glass-tier3 border border-white/15 shadow-glass-card space-y-6">
+      <div class="text-center space-y-2">
+        <div class="w-14 h-14 mx-auto rounded-2xl bg-gradient-to-tr from-blue-500 to-fuchsia-500 p-[1.5px] shadow-glow-blue">
+          <div class="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center">
+            <img src="/media/logo.png" onerror="this.src='/media/favicon.ico'" class="w-8 h-8 object-contain">
+          </div>
+        </div>
+        <h1 class="text-2xl font-black bg-gradient-to-r from-blue-400 to-fuchsia-400 bg-clip-text text-transparent">VRIZMODS Admin</h1>
+        <p class="text-xs text-slate-400">Masuk ke panel kontrol untuk mengelola APK</p>
+      </div>
+
+<!-- Form Login Admin (Value Sudah Dikosongkan) -->
+<form id="login-form" class="space-y-4">
+  <div>
+    <label class="block text-xs font-semibold text-slate-300 mb-1.5">Email Admin</label>
+    <input type="email" id="login-email" required placeholder="Masukkan email admin" class="w-full py-3.5 px-4 bg-slate-950/70 shadow-glass-inset border border-white/10 rounded-2xl text-slate-100 text-sm focus:outline-none focus:border-blue-500">
+  </div>
+  <div>
+    <label class="block text-xs font-semibold text-slate-300 mb-1.5">Password</label>
+    <input type="password" id="login-password" required placeholder="Masukkan password" class="w-full py-3.5 px-4 bg-slate-950/70 shadow-glass-inset border border-white/10 rounded-2xl text-slate-100 text-sm focus:outline-none focus:border-blue-500">
+  </div>
+  <button type="submit" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-blue-600 to-fuchsia-600 hover:from-blue-500 hover:to-fuchsia-500 text-white font-bold text-sm shadow-glow-blue transition hover:scale-[1.01]">
+    Masuk Panel Admin
+  </button>
+</form>
+
+      <p id="login-error" class="text-xs text-red-400 text-center font-medium"></p>
+    </div>
+  </div>
+
+  <!-- 2. DASHBOARD SECTION -->
+  <div id="dashboard-section" class="hidden min-h-screen flex flex-col">
+    <!-- TOPBAR GLASS -->
+    <header class="sticky top-0 z-40 bg-slate-950/50 glass-tier2 border-b border-white/10">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-500 to-fuchsia-500 p-[1px]">
+            <div class="w-full h-full bg-slate-950 rounded-[11px] flex items-center justify-center">
+              <img src="/media/logo.png" onerror="this.src='/media/favicon.ico'" class="w-6 h-6">
+            </div>
+          </div>
+          <span class="text-xl font-bold bg-gradient-to-r from-blue-400 to-fuchsia-400 bg-clip-text text-transparent">VRIZMODS Dashboard</span>
+        </div>
+
+        <button id="logout-btn" class="px-4 py-2 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20 font-semibold text-xs transition flex items-center gap-1.5">
+          <i class="ph ph-sign-out text-base"></i> Keluar
+        </button>
+      </div>
+    </header>
+
+    <!-- CONTENT BODY -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      
+      <!-- STATS CARDS -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+        <div class="p-5 rounded-3xl bg-white/[0.04] glass-tier2 border border-white/10 shadow-glass-card space-y-1">
+          <span class="text-xs font-semibold text-slate-400">Total APK</span>
+          <p id="stat-total-apks" class="text-2xl sm:text-3xl font-black text-slate-100">0</p>
+        </div>
+        <div class="p-5 rounded-3xl bg-white/[0.04] glass-tier2 border border-white/10 shadow-glass-card space-y-1">
+          <span class="text-xs font-semibold text-slate-400">APK Aktif</span>
+          <p id="stat-active-apks" class="text-2xl sm:text-3xl font-black text-emerald-400">0</p>
+        </div>
+        <div class="p-5 rounded-3xl bg-white/[0.04] glass-tier2 border border-white/10 shadow-glass-card space-y-1">
+          <span class="text-xs font-semibold text-slate-400">Total Views</span>
+          <p id="stat-total-views" class="text-2xl sm:text-3xl font-black text-cyan-400">0</p>
+        </div>
+        <div class="p-5 rounded-3xl bg-white/[0.04] glass-tier2 border border-white/10 shadow-glass-card space-y-1">
+          <span class="text-xs font-semibold text-slate-400">Total Downloads</span>
+          <p id="stat-total-downloads" class="text-2xl sm:text-3xl font-black text-fuchsia-400">0</p>
+        </div>
+      </div>
+
+      <!-- APK MANAGEMENT TABLE CONTAINER -->
+      <div class="p-6 rounded-3xl bg-white/[0.04] glass-tier2 border border-white/10 shadow-glass-card space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-xl font-bold text-slate-100">Kelola Aplikasi (APK)</h2>
+            <p class="text-xs text-slate-400">Tambah, ubah, atau hapus item di database</p>
+          </div>
+          <button id="add-apk-btn" class="px-5 py-3 rounded-2xl bg-gradient-to-r from-blue-600 to-fuchsia-600 hover:from-blue-500 hover:to-fuchsia-500 text-white font-bold text-xs shadow-glow-blue transition hover:scale-105 flex items-center justify-center gap-2">
+            <i class="ph ph-plus-circle text-lg"></i> Tambah APK Baru
+          </button>
+        </div>
+        
+        <!-- Tombol Kelola Kategori (di samping tombol Tambah APK Baru) -->
+<div class="flex flex-wrap gap-2">
+  <button id="manage-category-btn" class="px-4 py-3 rounded-2xl bg-white/5 border border-white/10 text-slate-300 font-semibold text-xs hover:bg-white/10 transition flex items-center gap-2">
+    <i class="ph ph-tag text-lg text-cyan-400"></i> Kelola Kategori
+  </button>
+  <button id="add-apk-btn" class="px-5 py-3 rounded-2xl bg-gradient-to-r from-blue-600 to-fuchsia-600 text-white font-bold text-xs shadow-glow-blue transition hover:scale-105 flex items-center justify-center gap-2">
+    <i class="ph ph-plus-circle text-lg"></i> Tambah APK Baru
+  </button>
+</div>
+
+<!-- MODAL KELOLA KATEGORI -->
+<div id="category-modal" class="fixed inset-0 z-50 bg-slate-950/80 glass-tier3 hidden flex items-center justify-center p-4">
+  <div class="w-full max-w-md p-6 sm:p-8 rounded-3xl bg-slate-900/90 border border-white/15 shadow-2xl space-y-6">
+    <div class="flex items-center justify-between border-b border-white/10 pb-4">
+      <h3 class="text-lg font-bold text-slate-100">Kelola Kategori APK</h3>
+      <button id="close-cat-modal-btn" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400">
+        <i class="ph ph-x text-xl"></i>
+      </button>
+    </div>
+
+    <!-- FORM TAMBAH KATEGORI -->
+    <form id="category-form" class="space-y-3 bg-white/5 p-4 rounded-2xl border border-white/10">
+      <div class="flex gap-2">
+        <input type="text" id="cat-name-input" required placeholder="Nama Kategori (ex: Action)" class="w-full p-2.5 bg-slate-950/70 border border-white/10 rounded-xl text-xs text-slate-100 focus:outline-none">
+        <button type="submit" class="px-4 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 font-bold text-xs text-white shrink-0">
+          + Tambah
+        </button>
+      </div>
+    </form>
+
+    <!-- LIST KATEGORI TERDAFTAR -->
+    <div class="space-y-2 max-h-56 overflow-y-auto" id="category-list-container">
+      <!-- Rendered via app.js -->
+    </div>
+  </div>
+</div>
+
+
+        <!-- RESPONSIVE TABLE -->
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm text-slate-300">
+            <thead class="text-xs text-slate-400 uppercase bg-white/5 border-b border-white/10">
+              <tr>
+                <th class="p-4 rounded-l-2xl">Icon</th>
+                <th class="p-4">Judul & Slug</th>
+                <th class="p-4">Versi</th>
+                <th class="p-4">Views</th>
+                <th class="p-4">Downloads</th>
+                <th class="p-4">Status</th>
+                <th class="p-4 rounded-r-2xl text-right">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="apk-table-body" class="divide-y divide-white/5">
+              <!-- Rendered via app.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- MODAL ADD/EDIT APK -->
+  <div id="apk-modal" class="fixed inset-0 z-50 bg-slate-950/80 glass-tier3 hidden flex items-center justify-center p-4">
+    <div class="w-full max-w-xl p-6 sm:p-8 rounded-3xl bg-slate-900/90 border border-white/15 shadow-2xl max-h-[90vh] overflow-y-auto space-y-6">
+      <div class="flex items-center justify-between border-b border-white/10 pb-4">
+        <h3 id="modal-title" class="text-lg font-bold text-slate-100">Tambah APK Baru</h3>
+        <button id="close-modal-btn" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400">
+          <i class="ph ph-x text-xl"></i>
+        </button>
+      </div>
+
+      <form id="apk-form" class="space-y-4">
+        <input type="hidden" id="apk-id">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Judul APK</label>
+            <input type="text" id="apk-title" required placeholder="GTA San Andreas Mod" class="w-full p-3 bg-slate-950/70 border border-white/10 rounded-xl text-xs text-slate-100 focus:outline-none focus:border-blue-500">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Slug URL</label>
+            <input type="text" id="apk-slug" required placeholder="gta-san-andreas-mod" class="w-full p-3 bg-slate-950/70 border border-white/10 rounded-xl text-xs text-slate-100 focus:outline-none focus:border-blue-500">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">URL Logo/Icon</label>
+            <input type="url" id="apk-icon-url" placeholder="https://vrizmods.com/media/logo.png" class="w-full p-3 bg-slate-950/70 border border-white/10 rounded-xl text-xs text-slate-100 focus:outline-none focus:border-blue-500">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Versi</label>
+            <input type="text" id="apk-version" required placeholder="2.10" class="w-full p-3 bg-slate-950/70 border border-white/10 rounded-xl text-xs text-slate-100 focus:outline-none focus:border-blue-500">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Kategori</label>
+            <input type="text" id="apk-category" placeholder="Games" class="w-full p-3 bg-slate-950/70 border border-white/10 rounded-xl text-xs text-slate-100 focus:outline-none focus:border-blue-500">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Ukuran File</label>
+            <input type="text" id="apk-file-size" placeholder="2.1 GB" class="w-full p-3 bg-slate-950/70 border border-white/10 rounded-xl text-xs text-slate-100 focus:outline-none focus:border-blue-500">
+          </div>
+        </div>
+        <div class="mt-4">
+  <label class="block text-xs font-semibold text-slate-300 mb-1">Pengembang (Developer)</label>
+  <input type="text" id="apk-developer" placeholder="Contoh: Rockstar Games" class="w-full p-3 bg-slate-950/70 border border-white/10 rounded-xl text-xs text-slate-100 focus:outline-none focus:border-blue-500">
+</div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Fitur Mod</label>
+          <input type="text" id="apk-mod-features" placeholder="Unlimited Money, Cleo Menu" class="w-full p-3 bg-slate-950/70 border border-white/10 rounded-xl text-xs text-slate-100 focus:outline-none focus:border-blue-500">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Deskripsi</label>
+          <textarea id="apk-description" rows="3" placeholder="Deskripsi lengkap mengenai game/aplikasi mod ini..." class="w-full p-3 bg-slate-950/70 border border-white/10 rounded-xl text-xs text-slate-100 focus:outline-none focus:border-blue-500"></textarea>
+        </div>
+
+        <div class="flex justify-end gap-3 pt-4 border-t border-white/10">
+          <button type="button" id="cancel-modal-btn" class="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-xs font-semibold text-slate-300">Batal</button>
+          <button type="submit" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-fuchsia-600 text-xs font-bold text-white shadow-glow-blue">Simpan APK</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL KELOLA SERVER DOWNLOAD -->
+  <div id="server-modal" class="fixed inset-0 z-50 bg-slate-950/80 glass-tier3 hidden flex items-center justify-center p-4">
+    <div class="w-full max-w-lg p-6 sm:p-8 rounded-3xl bg-slate-900/90 border border-white/15 shadow-2xl space-y-6">
+      <div class="flex items-center justify-between border-b border-white/10 pb-4">
+        <div>
+          <h3 class="text-lg font-bold text-slate-100">Server Download Alternatif</h3>
+          <p id="server-apk-title" class="text-xs text-blue-400 font-medium"></p>
+        </div>
+        <button id="close-server-modal-btn" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400">
+          <i class="ph ph-x text-xl"></i>
+        </button>
+      </div>
+
+      <!-- FORM TAMBAH SERVER -->
+      <form id="server-form" class="space-y-3 bg-white/5 p-4 rounded-2xl border border-white/10">
+        <input type="hidden" id="server-target-apk-id">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <input type="text" id="server-name" required placeholder="Nama Server (ex: Google Drive)" class="p-2.5 bg-slate-950/70 border border-white/10 rounded-xl text-xs text-slate-100 focus:outline-none">
+          <input type="url" id="server-url" required placeholder="https://..." class="p-2.5 bg-slate-950/70 border border-white/10 rounded-xl text-xs text-slate-100 focus:outline-none">
+        </div>
+        <button type="submit" class="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-xs text-white">
+          + Tambah Server Download
+        </button>
+      </form>
+
+      <!-- LIST SERVER TERDAFTAR -->
+      <div class="space-y-2 max-h-56 overflow-y-auto" id="server-list-container">
+        <!-- Rendered via app.js -->
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

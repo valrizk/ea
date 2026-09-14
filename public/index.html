@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="id" class="dark scroll-smooth selection:bg-fuchsia-500 selection:text-white">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>VRIZMODS — Premium Glassmorphism Mod Platform</title>
+
+  <!-- Tailwind CSS Engine -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            glass: {
+              surface: 'rgba(255, 255, 255, 0.05)',
+              elevated: 'rgba(255, 255, 255, 0.10)',
+              modal: 'rgba(15, 23, 42, 0.75)',
+              border: 'rgba(255, 255, 255, 0.15)',
+              borderHover: 'rgba(255, 255, 255, 0.35)',
+              inset: 'rgba(0, 0, 0, 0.25)'
+            },
+            accent: {
+              blue: '#3b82f6',
+              purple: '#a855f7',
+              magenta: '#d946ef',
+              cyan: '#06b6d4',
+              emerald: '#10b981'
+            }
+          },
+          backdropBlur: {
+            tier1: '12px',
+            tier2: '24px',
+            tier3: '40px'
+          },
+          boxShadow: {
+            'glass-panel': '0 8px 32px 0 rgba(0, 0, 0, 0.37), inset 0 1px 0 0 rgba(255, 255, 255, 0.2)',
+            'glass-card': '0 12px 40px 0 rgba(0, 0, 0, 0.45), inset 0 1px 0 0 rgba(255, 255, 255, 0.15)',
+            'glass-inset': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.5), 0 1px 0 0 rgba(255, 255, 255, 0.1)',
+            'glow-blue': '0 0 35px -5px rgba(59, 130, 246, 0.4)',
+            'glow-magenta': '0 0 35px -5px rgba(217, 70, 239, 0.4)'
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Fallback CSS & Font Smoothing -->
+  <style>
+    body {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      background-color: #030712;
+    }
+    /* Safari & Cross-Browser Fallback */
+    .glass-effect-tier1 {
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+    }
+    .glass-effect-tier2 {
+      -webkit-backdrop-filter: blur(24px);
+      backdrop-filter: blur(24px);
+    }
+    .glass-effect-tier3 {
+      -webkit-backdrop-filter: blur(40px);
+      backdrop-filter: blur(40px);
+    }
+    @supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+      .glass-effect-tier1, .glass-effect-tier2, .glass-effect-tier3 {
+        background-color: rgba(15, 23, 42, 0.95) !important;
+      }
+    }
+  </style>
+
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body class="text-slate-100 font-sans min-h-screen flex flex-col antialiased overflow-x-hidden relative">
+
+  <!-- ATMOSPHERIC BACKGROUND (FLOATING GLOW ORBS) -->
+  <div class="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
+    <!-- Orb 1: Blue -->
+    <div class="absolute -top-20 -left-20 w-[500px] h-[500px] bg-blue-600/25 rounded-full filter blur-[120px] will-change-transform animate-pulse"></div>
+    <!-- Orb 2: Magenta -->
+    <div class="absolute top-1/3 -right-20 w-[450px] h-[450px] bg-fuchsia-600/20 rounded-full filter blur-[130px] will-change-transform"></div>
+    <!-- Orb 3: Cyan -->
+    <div class="absolute -bottom-20 left-1/3 w-[550px] h-[550px] bg-cyan-500/15 rounded-full filter blur-[140px] will-change-transform"></div>
+  </div>
+
+  <!-- GLASS NAVBAR (TIER 2 GLASS) -->
+  <header class="sticky top-0 z-40 bg-slate-950/40 glass-effect-tier2 border-b border-white/10 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        
+        <!-- Brand Logo -->
+        <a href="/" onclick="event.preventDefault(); window.scrollToPage('home')" class="flex items-center space-x-3 group">
+          <div class="relative w-11 h-11 rounded-2xl bg-gradient-to-tr from-blue-500 via-indigo-500 to-fuchsia-500 p-[1.5px] transition-transform duration-300 group-hover:scale-105 shadow-glow-blue">
+            <div class="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center overflow-hidden">
+              <img src="/media/logo.png" onerror="this.src='/media/favicon.ico'" alt="VRIZMODS" class="w-7 h-7 object-contain">
+            </div>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-2xl font-black tracking-wider bg-gradient-to-r from-blue-400 via-indigo-300 to-fuchsia-400 bg-clip-text text-transparent drop-shadow-sm">
+              VRIZMODS
+            </span>
+            <span class="text-[9px] font-bold text-slate-400 tracking-widest uppercase -mt-1">GLASS PLATFORM 2026</span>
+          </div>
+        </a>
+
+        <!-- Desktop Navigation -->
+        <nav class="hidden md:flex items-center space-x-8">
+          <button onclick="window.scrollToPage('home')" class="text-sm font-semibold text-slate-300 hover:text-blue-400 transition-colors flex items-center gap-2">
+            <i class="ph ph-house text-lg"></i> Beranda
+          </button>
+          <button onclick="window.scrollToPage('apks')" class="text-sm font-semibold text-slate-300 hover:text-blue-400 transition-colors flex items-center gap-2">
+            <i class="ph ph-squares-four text-lg"></i> Semua APK
+          </button>
+          <button onclick="window.toggleDrawer('filter-drawer')" class="text-sm font-semibold text-slate-300 hover:text-fuchsia-400 transition-colors flex items-center gap-2">
+            <i class="ph ph-funnel text-lg"></i> Kategori
+          </button>
+        </nav>
+
+        <!-- Right Action Button / Drawer Trigger (Mobile) -->
+        <div class="flex items-center space-x-3">
+          <button onclick="window.toggleDrawer('search-drawer')" class="p-2.5 rounded-2xl bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 hover:text-white transition shadow-glass-panel">
+            <i class="ph ph-magnifying-glass text-xl"></i>
+          </button>
+          <button onclick="window.toggleDrawer('mobile-menu-drawer')" class="md:hidden p-2.5 rounded-2xl bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 hover:text-white transition shadow-glass-panel">
+            <i class="ph ph-list text-xl"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN APP DISPLAY -->
+  <main id="app-root" class="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 transition-all duration-300">
+    <!-- Rendered dynamically by app.js -->
+  </main>
+
+  <!-- DRAWER OVERLAY & SYSTEM (GLASS TIER 3) -->
+  <div id="drawer-overlay" class="fixed inset-0 z-50 bg-slate-950/60 glass-effect-tier2 opacity-0 pointer-events-none transition-opacity duration-300" onclick="window.closeAllDrawers()"></div>
+
+  <!-- Mobile Menu Drawer -->
+  <aside id="mobile-menu-drawer" class="fixed top-0 right-0 z-50 w-80 max-w-[85vw] h-full bg-slate-950/80 glass-effect-tier3 border-l border-white/15 transform translate-x-full transition-transform duration-300 flex flex-col justify-between p-6 shadow-2xl">
+    <div>
+      <div class="flex items-center justify-between pb-6 border-b border-white/10">
+        <span class="text-lg font-bold bg-gradient-to-r from-blue-400 to-fuchsia-400 bg-clip-text text-transparent">Menu Navigasi</span>
+        <button onclick="window.closeAllDrawers()" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white">
+          <i class="ph ph-x text-xl"></i>
+        </button>
+      </div>
+
+      <nav class="mt-6 space-y-3">
+        <button onclick="window.scrollToPage('home'); window.closeAllDrawers()" class="w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl bg-white/5 border border-white/10 text-slate-200 font-medium hover:bg-blue-600/20 hover:border-blue-500/40 transition shadow-glass-panel">
+          <i class="ph ph-house text-xl text-blue-400"></i> Beranda
+        </button>
+        <button onclick="window.scrollToPage('apks'); window.closeAllDrawers()" class="w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl bg-white/5 border border-white/10 text-slate-200 font-medium hover:bg-fuchsia-600/20 hover:border-fuchsia-500/40 transition shadow-glass-panel">
+          <i class="ph ph-squares-four text-xl text-fuchsia-400"></i> Semua APK Mod
+        </button>
+        <button onclick="window.toggleDrawer('filter-drawer');" class="w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl bg-white/5 border border-white/10 text-slate-200 font-medium hover:bg-cyan-600/20 hover:border-cyan-500/40 transition shadow-glass-panel">
+          <i class="ph ph-funnel text-xl text-cyan-400"></i> Pilih Kategori
+        </button>
+      </nav>
+    </div>
+
+    <div class="pt-6 border-t border-white/10 text-center">
+      <p class="text-xs text-slate-400 font-medium">VRIZMODS Glass Edition</p>
+      <p class="text-[10px] text-slate-500 mt-1">© 2026 High Quality Verified Mods</p>
+    </div>
+  </aside>
+
+  <!-- Filter Category Drawer -->
+  <aside id="filter-drawer" class="fixed top-0 left-0 z-50 w-85 max-w-[85vw] h-full bg-slate-950/80 glass-effect-tier3 border-r border-white/15 transform -translate-x-full transition-transform duration-300 flex flex-col p-6 shadow-2xl">
+    <div class="flex items-center justify-between pb-6 border-b border-white/10">
+      <div class="flex items-center gap-2">
+        <i class="ph ph-funnel text-xl text-cyan-400"></i>
+        <span class="text-lg font-bold text-slate-100">Filter Kategori</span>
+      </div>
+      <button onclick="window.closeAllDrawers()" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white">
+        <i class="ph ph-x text-xl"></i>
+      </button>
+    </div>
+
+    <div id="category-drawer-list" class="mt-6 space-y-2 overflow-y-auto flex-grow pr-1">
+      <!-- Generated via JS -->
+    </div>
+  </aside>
+
+  <!-- Search Drawer (Top Slide Inset Glass Input) -->
+  <div id="search-drawer" class="fixed top-0 left-0 right-0 z-50 bg-slate-950/85 glass-effect-tier3 border-b border-white/15 transform -translate-y-full transition-transform duration-300 p-6 shadow-2xl">
+    <div class="max-w-3xl mx-auto space-y-4">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-semibold uppercase tracking-widest text-slate-400">Pencarian APK Mod</span>
+        <button onclick="window.closeAllDrawers()" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white">
+          <i class="ph ph-x text-xl"></i>
+        </button>
+      </div>
+      <div class="relative">
+        <input type="text" id="drawer-search-input" placeholder="Ketik nama APK atau Mod..." class="w-full py-4 pl-12 pr-4 bg-slate-900/60 shadow-glass-inset border border-white/10 rounded-2xl text-slate-100 placeholder-slate-500 focus:outline-none focus:border-blue-500 text-base">
+        <i class="ph ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-xl text-slate-400"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION SYSTEM -->
+  <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-3 pointer-events-none"></div>
+
+  <!-- FOOTER GLASS -->
+  <footer class="mt-auto border-t border-white/10 bg-slate-950/50 glass-effect-tier2">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="flex items-center space-x-3">
+          <div class="w-7 h-7 rounded-lg bg-gradient-to-tr from-blue-500 to-fuchsia-500 p-[1px]">
+            <div class="w-full h-full bg-slate-950 rounded-[7px] flex items-center justify-center">
+              <img src="/media/logo.png" onerror="this.src='/media/favicon.ico'" class="w-4 h-4">
+            </div>
+          </div>
+          <span class="text-base font-bold bg-gradient-to-r from-blue-400 to-fuchsia-400 bg-clip-text text-transparent">VRIZMODS</span>
+          <span class="text-xs text-slate-400">© 2026 VRIZMODS. All rights reserved.</span>
+        </div>
+        <p class="text-xs text-slate-400 text-center md:text-right">
+          Penyedia APK Mod Terpercaya dengan Tampilan Glassmorphism Modern.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/app.js"></script>
+</body>
+</html>

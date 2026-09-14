@@ -1,0 +1,371 @@
+/**
+ * VRIZMODS ADMIN DASHBOARD ENGINE 2026
+ */
+
+const API_BASE = '/api';
+
+// DOM Elements
+const loginSection = document.getElementById('login-section');
+const dashboardSection = document.getElementById('dashboard-section');
+const loginForm = document.getElementById('login-form');
+const loginError = document.getElementById('login-error');
+const logoutBtn = document.getElementById('logout-btn');
+
+const apkModal = document.getElementById('apk-modal');
+const apkForm = document.getElementById('apk-form');
+const addApkBtn = document.getElementById('add-apk-btn');
+const closeModalBtn = document.getElementById('close-modal-btn');
+const cancelModalBtn = document.getElementById('cancel-modal-btn');
+
+const serverModal = document.getElementById('server-modal');
+const serverForm = document.getElementById('server-form');
+const closeServerModalBtn = document.getElementById('close-server-modal-btn');
+
+let token = localStorage.getItem('vrizmods_token') || '';
+
+// Inisialisasi
+document.addEventListener('DOMContentLoaded', () => {
+  if (token) {
+    showDashboard();
+  } else {
+    showLogin();
+  }
+});
+
+// 1. AUTHENTICATION
+loginForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  loginError.textContent = '';
+  const email = document.getElementById('login-email').value;
+  const password = document.getElementById('login-password').value;
+
+  try {
+    const res = await fetch(`${API_BASE}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+    const result = await res.json();
+
+    if (res.ok && result.data && result.data.access_token) {
+      token = result.data.access_token;
+      localStorage.setItem('vrizmods_token', token);
+      showDashboard();
+    } else {
+      loginError.textContent = result.message || 'Login Admin gagal.';
+    }
+  } catch (err) {
+    loginError.textContent = 'Gagal terhubung ke server Node.js';
+  }
+});
+
+logoutBtn.addEventListener('click', () => {
+  token = '';
+  localStorage.removeItem('vrizmods_token');
+  showLogin();
+});
+
+function showLogin() {
+  loginSection.classList.remove('hidden');
+  dashboardSection.classList.add('hidden');
+}
+
+function showDashboard() {
+  loginSection.classList.add('hidden');
+  dashboardSection.classList.remove('hidden');
+  loadDashboardStats();
+  loadApkTable();
+}
+
+// 2. LOAD DASHBOARD STATS
+async function loadDashboardStats() {
+  try {
+    const res = await fetch(`${API_BASE}/dashboard/stats`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    const result = await res.json();
+
+    if (res.ok && result.data) {
+      const summary = result.data.summary;
+      document.getElementById('stat-total-apks').textContent = summary.total_apks || 0;
+      document.getElementById('stat-active-apks').textContent = summary.active_apks || 0;
+      document.getElementById('stat-total-views').textContent = summary.total_views || 0;
+      document.getElementById('stat-total-downloads').textContent = summary.total_downloads || 0;
+    }
+  } catch (err) {
+    console.error('Error stats:', err);
+  }
+}
+
+// 3. LOAD TABLE APK
+// LOAD TABLE APK (Menampilkan SEMUA APK untuk Admin)
+async function loadApkTable() {
+  try {
+    // Tambahkan query param include_inactive=true agar Admin melihat APK aktif & nonaktif
+    const res = await fetch(`${API_BASE}/apks?include_inactive=true`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    const result = await res.json();
+    const tbody = document.getElementById('apk-table-body');
+    tbody.innerHTML = '';
+
+    const apks = Array.isArray(result) ? result : (result.data || []);
+
+    if (apks.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-slate-400">Belum ada data APK di database.</td></tr>`;
+      return;
+    }
+
+    apks.forEach(apk => {
+      const tr = document.createElement('tr');
+      tr.className = 'hover:bg-white/5 transition';
+      tr.innerHTML = `
+        <td class="p-4">
+          <img src="${apk.icon_url || '/media/logo.png'}" onerror="this.src='/media/logo.png'" class="w-10 h-10 rounded-xl object-cover bg-slate-800 border border-white/10">
+        </td>
+        <td class="p-4">
+          <div class="font-bold text-slate-100">${apk.title}</div>
+          <div class="text-xs text-slate-400">${apk.slug}</div>
+        </td>
+        <td class="p-4 text-xs font-medium">v${apk.version}</td>
+        <td class="p-4 text-xs font-semibold text-cyan-400">${apk.view_count || 0}</td>
+        <td class="p-4 text-xs font-semibold text-fuchsia-400">${apk.download_count || 0}</td>
+        <td class="p-4">
+          <button onclick="window.toggleApkStatus('${apk.id}', ${!apk.is_active})" class="px-2.5 py-1 rounded-full text-[10px] font-bold transition ${apk.is_active ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20' : 'bg-red-500/10 border border-red-500/30 text-red-400 hover:bg-red-500/20'}">
+            ${apk.is_active ? '✅ Aktif' : '❌ Nonaktif'}
+          </button>
+        </td>
+        <td class="p-4 text-right space-x-1">
+          <button onclick="window.openServerModal('${apk.id}', '${apk.title}')" class="p-2 rounded-xl bg-blue-500/10 text-blue-400 hover:bg-blue-500/20" title="Kelola Server">
+            <i class="ph ph-hard-drives text-base"></i>
+          </button>
+          <button onclick="window.deleteApk('${apk.id}')" class="p-2 rounded-xl bg-red-500/10 text-red-400 hover:bg-red-500/20" title="Hapus">
+            <i class="ph ph-trash text-base"></i>
+          </button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+  } catch (err) {
+    console.error('Error table:', err);
+  }
+}
+
+
+// 4. MODAL ADD APK
+addApkBtn.addEventListener('click', () => {
+  apkForm.reset();
+  document.getElementById('apk-id').value = '';
+  document.getElementById('modal-title').textContent = 'Tambah APK Baru';
+  apkModal.classList.remove('hidden');
+});
+
+closeModalBtn.addEventListener('click', () => apkModal.classList.add('hidden'));
+cancelModalBtn.addEventListener('click', () => apkModal.classList.add('hidden'));
+
+// SUBMIT ADD APK
+// Tambahkan Helper Fungsi Pembersih Slug Aman URL (Sanitizer)
+function sanitizeSlug(text) {
+  return text
+    .toString()
+    .toLowerCase()
+    .trim()
+    .replace(/\%/g, '-persen') // Ubah % menjadi kata 'persen'
+    .replace(/[^a-z0-9 -]/g, '') // Hapus semua karakter aneh/spesial selain huruf dan angka
+    .replace(/\s+/g, '-') // Ganti spasi dengan tanda minus
+    .replace(/-+/g, '-'); // Ganti minus ganda menjadi single minus
+}
+
+// Otomatis bersihkan slug saat input slug diubah
+document.getElementById('apk-slug').addEventListener('input', (e) => {
+  e.target.value = sanitizeSlug(e.target.value);
+});
+
+// Otomatis buatkan slug jika input judul diisi
+document.getElementById('apk-title').addEventListener('input', (e) => {
+  const slugInput = document.getElementById('apk-slug');
+  if (!document.getElementById('apk-id').value) { // Hanya jika tambah baru
+    slugInput.value = sanitizeSlug(e.target.value);
+  }
+});
+
+// Update pada submit form APK agar slug dipastikan bersih sebelum dikirim
+// 1. Pada event listener submit form APK (apkForm.addEventListener('submit', ...))
+apkForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  const rawSlug = document.getElementById('apk-slug').value;
+  const cleanSlug = sanitizeSlug(rawSlug);
+
+  const payload = {
+    title: document.getElementById('apk-title').value,
+    slug: cleanSlug,
+    icon_url: document.getElementById('apk-icon-url').value,
+    version: document.getElementById('apk-version').value,
+    category: document.getElementById('apk-category').value,
+    developer: document.getElementById('apk-developer').value, // <-- Tambahkan developer
+    file_size: document.getElementById('apk-file-size').value,
+    mod_features: document.getElementById('apk-mod-features').value,
+    description: document.getElementById('apk-description').value
+  };
+
+  try {
+    const res = await fetch(`${API_BASE}/apks`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (res.ok) {
+      apkModal.classList.add('hidden');
+      loadDashboardStats();
+      loadApkTable();
+    } else {
+      const err = await res.json();
+      alert('Gagal menyimpan APK: ' + (err.message || 'Error'));
+    }
+  } catch (err) {
+    alert('Terjadi kesalahan koneksi');
+  }
+});
+
+// 2. Pada listener Add APK Button, reset input developer
+addApkBtn.addEventListener('click', () => {
+  apkForm.reset();
+  document.getElementById('apk-id').value = '';
+  document.getElementById('apk-developer').value = ''; // Reset developer
+  document.getElementById('modal-title').textContent = 'Tambah APK Baru';
+  apkModal.classList.remove('hidden');
+});
+
+
+
+// TOGGLE STATUS APK
+window.toggleApkStatus = async function(id, is_active) {
+  try {
+    const res = await fetch(`${API_BASE}/apks/${id}/status`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ is_active })
+    });
+    if (res.ok) {
+      loadDashboardStats();
+      loadApkTable();
+    }
+  } catch (e) {
+    alert('Gagal memperbarui status');
+  }
+};
+
+// DELETE APK
+// HAPUS APK SAFELY
+window.deleteApk = async function(id) {
+  if (!confirm('Apakah kamu yakin ingin menghapus APK ini beserta seluruh servernya?')) return;
+
+  try {
+    const res = await fetch(`${API_BASE}/apks/${id}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+
+    const result = await res.json();
+
+    if (res.ok) {
+      loadDashboardStats();
+      loadApkTable();
+    } else {
+      alert('Gagal menghapus APK: ' + (result.message || 'Error server'));
+    }
+  } catch (e) {
+    alert('Terjadi kesalahan jaringan saat menghapus APK');
+  }
+};
+
+
+// 5. SERVER DOWNLOAD MANAGER
+window.openServerModal = async function(apkId, apkTitle) {
+  document.getElementById('server-target-apk-id').value = apkId;
+  document.getElementById('server-apk-title').textContent = apkTitle;
+  serverModal.classList.remove('hidden');
+  await loadServerList(apkId);
+};
+
+closeServerModalBtn.addEventListener('click', () => serverModal.classList.add('hidden'));
+
+async function loadServerList(apkId) {
+  const container = document.getElementById('server-list-container');
+  container.innerHTML = '<p class="text-xs text-slate-400">Memuat server...</p>';
+
+  try {
+    const res = await fetch(`${API_BASE}/servers/apk/${apkId}`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    const result = await res.json();
+    container.innerHTML = '';
+
+    if (res.ok && result.data && result.data.length > 0) {
+      result.data.forEach(srv => {
+        const item = document.createElement('div');
+        item.className = 'flex items-center justify-between p-3 bg-white/5 rounded-xl border border-white/10 text-xs';
+        item.innerHTML = `
+          <div>
+            <div class="font-bold text-slate-200">${srv.server_name}</div>
+            <div class="text-[10px] text-slate-400 truncate max-w-[200px]">${srv.download_url}</div>
+          </div>
+          <button onclick="window.deleteServer('${srv.id}', '${apkId}')" class="p-1.5 rounded-lg bg-red-500/20 text-red-400 hover:bg-red-500/30">
+            <i class="ph ph-trash"></i>
+          </button>
+        `;
+        container.appendChild(item);
+      });
+    } else {
+      container.innerHTML = '<p class="text-xs text-slate-400 text-center py-2">Belum ada server alternatif untuk APK ini.</p>';
+    }
+  } catch (e) {
+    container.innerHTML = '<p class="text-xs text-red-400">Gagal memuat server.</p>';
+  }
+}
+
+serverForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const apk_id = document.getElementById('server-target-apk-id').value;
+  const server_name = document.getElementById('server-name').value;
+  const download_url = document.getElementById('server-url').value;
+
+  try {
+    const res = await fetch(`${API_BASE}/servers`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ apk_id, server_name, download_url })
+    });
+
+    if (res.ok) {
+      document.getElementById('server-name').value = '';
+      document.getElementById('server-url').value = '';
+      loadServerList(apk_id);
+    }
+  } catch (e) {
+    alert('Gagal menambah server');
+  }
+});
+
+window.deleteServer = async function(serverId, apkId) {
+  try {
+    const res = await fetch(`${API_BASE}/servers/${serverId}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    if (res.ok) loadServerList(apkId);
+  } catch (e) {
+    alert('Gagal menghapus server');
+  }
+};

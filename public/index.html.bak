@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="id" class="dark scroll-smooth selection:bg-fuchsia-500 selection:text-white">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>VRIZMODS — Futuristic APK & Mod Platform</title>
+
+  <!-- Tailwind CSS Play CDN (Modern 2026 Engine) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            dark: {
+              base: '#030712',
+              card: 'rgba(17, 24, 39, 0.55)',
+              elevated: 'rgba(31, 41, 55, 0.75)',
+              border: 'rgba(255, 255, 255, 0.08)'
+            },
+            brand: {
+              blue: '#3b82f6',
+              cyan: '#06b6d4',
+              magenta: '#d946ef',
+              purple: '#a855f7',
+              emerald: '#10b981'
+            }
+          },
+          boxShadow: {
+            'glow-blue': '0 0 25px -5px rgba(59, 130, 246, 0.3)',
+            'glow-magenta': '0 0 25px -5px rgba(217, 70, 239, 0.3)',
+            'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.37)'
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Phosphor Icons for Futuristic UI -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body class="bg-[#030712] text-slate-100 font-sans min-h-screen flex flex-col antialiased overflow-x-hidden relative">
+
+  <!-- Ambient Light Gradients Background (Glow Effect) -->
+  <div class="fixed top-0 left-1/4 -z-10 w-96 h-96 bg-blue-600/15 rounded-full blur-[120px] pointer-events-none"></div>
+  <div class="fixed top-1/3 right-10 -z-10 w-80 h-80 bg-fuchsia-600/15 rounded-full blur-[140px] pointer-events-none"></div>
+  <div class="fixed bottom-10 left-10 -z-10 w-96 h-96 bg-cyan-500/10 rounded-full blur-[150px] pointer-events-none"></div>
+
+  <!-- GLASS NAVBAR -->
+  <header class="sticky top-0 z-40 backdrop-blur-xl bg-[#030712]/70 border-b border-white/10 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        
+        <!-- Brand Logo -->
+        <a href="/" onclick="event.preventDefault(); window.scrollToPage('home')" class="flex items-center space-x-3 group">
+          <div class="relative w-11 h-11 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-500 to-fuchsia-500 p-[1.5px] transition-transform duration-300 group-hover:scale-105 shadow-glow-blue">
+            <div class="w-full h-full bg-[#030712] rounded-[14px] flex items-center justify-center overflow-hidden">
+              <img src="/media/logo.png" onerror="this.src='/media/favicon.ico'" alt="VRIZMODS" class="w-7 h-7 object-contain">
+            </div>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-2xl font-black tracking-wider bg-gradient-to-r from-blue-400 via-indigo-300 to-fuchsia-400 bg-clip-text text-transparent">
+              VRIZMODS
+            </span>
+            <span class="text-[9px] font-semibold text-slate-400 tracking-widest uppercase -mt-1">MOD HUB 2026</span>
+          </div>
+        </a>
+
+        <!-- Desktop Navigation (Tanpa Link Admin) -->
+        <nav class="hidden md:flex items-center space-x-8">
+          <button onclick="window.scrollToPage('home')" class="text-sm font-semibold text-slate-300 hover:text-blue-400 transition-colors flex items-center gap-2">
+            <i class="ph ph-house text-lg"></i> Beranda
+          </button>
+          <button onclick="window.scrollToPage('apks')" class="text-sm font-semibold text-slate-300 hover:text-blue-400 transition-colors flex items-center gap-2">
+            <i class="ph ph-squares-four text-lg"></i> Semua APK
+          </button>
+          <button onclick="window.toggleDrawer('filter-drawer')" class="text-sm font-semibold text-slate-300 hover:text-fuchsia-400 transition-colors flex items-center gap-2">
+            <i class="ph ph-[#06b6d4] ph-funnel text-lg"></i> Kategori
+          </button>
+        </nav>
+
+        <!-- Right Action Button / Drawer Trigger (Mobile) -->
+        <div class="flex items-center space-x-3">
+          <button onclick="window.toggleDrawer('search-drawer')" class="p-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 hover:text-white transition">
+            <i class="ph ph-magnifying-glass text-xl"></i>
+          </button>
+          <button onclick="window.toggleDrawer('mobile-menu-drawer')" class="md:hidden p-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 hover:text-white transition">
+            <i class="ph ph-list text-xl"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN APP DISPLAY -->
+  <main id="app-root" class="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 transition-all duration-300">
+    <!-- Rendered dynamically by app.js -->
+  </main>
+
+  <!-- DRAWER OVERLAY & SYSTEM (GLASSMORPHISM LACI 2026) -->
+  
+  <!-- Backdrop Overlay -->
+  <div id="drawer-overlay" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300" onclick="window.closeAllDrawers()"></div>
+
+  <!-- Mobile Navigation Drawer -->
+  <aside id="mobile-menu-drawer" class="fixed top-0 right-0 z-50 w-80 max-w-[85vw] h-full bg-[#070d19]/90 backdrop-blur-2xl border-l border-white/10 transform translate-x-full transition-transform duration-300 flex flex-col justify-between p-6 shadow-2xl">
+    <div>
+      <div class="flex items-center justify-between pb-6 border-b border-white/10">
+        <span class="text-lg font-bold bg-gradient-to-r from-blue-400 to-fuchsia-400 bg-clip-text text-transparent">Menu Navigasi</span>
+        <button onclick="window.closeAllDrawers()" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white">
+          <i class="ph ph-x text-xl"></i>
+        </button>
+      </div>
+
+      <nav class="mt-6 space-y-3">
+        <button onclick="window.scrollToPage('home'); window.closeAllDrawers()" class="w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl bg-white/5 border border-white/5 text-slate-200 font-medium hover:bg-blue-600/20 hover:border-blue-500/30 transition">
+          <i class="ph ph-house text-xl text-blue-400"></i> Beranda
+        </button>
+        <button onclick="window.scrollToPage('apks'); window.closeAllDrawers()" class="w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl bg-white/5 border border-white/5 text-slate-200 font-medium hover:bg-fuchsia-600/20 hover:border-fuchsia-500/30 transition">
+          <i class="ph ph-squares-four text-xl text-fuchsia-400"></i> Semua APK Mod
+        </button>
+        <button onclick="window.toggleDrawer('filter-drawer');" class="w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl bg-white/5 border border-white/5 text-slate-200 font-medium hover:bg-cyan-600/20 hover:border-cyan-500/30 transition">
+          <i class="ph ph-funnel text-xl text-cyan-400"></i> Pilih Kategori
+        </button>
+      </nav>
+    </div>
+
+    <div class="pt-6 border-t border-white/10 text-center">
+      <p class="text-xs text-slate-400 font-medium">VRIZMODS App Platform v2.0</p>
+      <p class="text-[10px] text-slate-400 mt-1">© 2026 High Quality Verified Mods</p>
+    </div>
+  </aside>
+
+  <!-- Filter Category Drawer -->
+  <aside id="filter-drawer" class="fixed top-0 left-0 z-50 w-85 max-w-[85vw] h-full bg-[#070d19]/90 backdrop-blur-2xl border-r border-white/10 transform -translate-x-full transition-transform duration-300 flex flex-col p-6 shadow-2xl">
+    <div class="flex items-center justify-between pb-6 border-b border-white/10">
+      <div class="flex items-center gap-2">
+        <i class="ph ph-funnel text-xl text-cyan-400"></i>
+        <span class="text-lg font-bold text-slate-100">Filter Kategori</span>
+      </div>
+      <button onclick="window.closeAllDrawers()" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white">
+        <i class="ph ph-x text-xl"></i>
+      </button>
+    </div>
+
+    <div id="category-drawer-list" class="mt-6 space-y-2 overflow-y-auto flex-grow pr-1">
+      <!-- Generated via JS -->
+    </div>
+  </aside>
+
+  <!-- Search Overlay Drawer (Top Slide) -->
+  <div id="search-drawer" class="fixed top-0 left-0 right-0 z-50 bg-[#070d19]/95 backdrop-blur-2xl border-b border-white/10 transform -translate-y-full transition-transform duration-300 p-6 shadow-2xl">
+    <div class="max-w-3xl mx-auto space-y-4">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-semibold uppercase tracking-widest text-slate-400">Pencarian APK Mod</span>
+        <button onclick="window.closeAllDrawers()" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white">
+          <i class="ph ph-x text-xl"></i>
+        </button>
+      </div>
+      <div class="relative">
+        <input type="text" id="drawer-search-input" placeholder="Ketik nama APK atau Mod yang dicari..." class="w-full py-4 pl-12 pr-4 bg-white/5 border border-white/15 rounded-2xl text-slate-100 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-base">
+        <i class="ph ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-xl text-slate-400"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION SYSTEM -->
+  <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-3 pointer-events-none"></div>
+
+  <!-- FOOTER MINIMAL FUTURISTIC -->
+  <footer class="mt-auto border-t border-white/10 bg-[#030712]/80 backdrop-blur-xl">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="flex items-center space-x-3">
+          <div class="w-7 h-7 rounded-lg bg-gradient-to-tr from-blue-600 to-fuchsia-600 p-[1px]">
+            <div class="w-full h-full bg-[#030712] rounded-[7px] flex items-center justify-center">
+              <img src="/media/logo.png" onerror="this.src='/media/favicon.ico'" class="w-4 h-4">
+            </div>
+          </div>
+          <span class="text-base font-bold bg-gradient-to-r from-blue-400 to-fuchsia-400 bg-clip-text text-transparent">VRIZMODS</span>
+          <span class="text-xs text-slate-400">© 2026 VRIZMODS. All rights reserved.</span>
+        </div>
+        <p class="text-xs text-slate-400 text-center md:text-right">
+          Platform Pengunduhan APK Mod Android Aman, Terverifikasi & Bebas Iklan Jahat.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- App Main Script -->
+  <script src="/app.js"></script>
+</body>
+</html>
